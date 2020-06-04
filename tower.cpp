@@ -4,7 +4,6 @@
 const QSize Tower::t_size(150,190);
 
 
-
 Tower::Tower(QPoint pos, const QPixmap &sprite):
 t_pos(pos),t_sprite(sprite),t_damage(10),t_rate(1000),t_attacjRange(100)
 {}
@@ -19,6 +18,7 @@ void Tower::draw(QPainter *painter) const
     QPoint trueposition=t_pos-pianyi;
     painter->drawPixmap(trueposition,t_sprite);
     painter->restore();
+
 }
 
 //void Tower::shoot(){}

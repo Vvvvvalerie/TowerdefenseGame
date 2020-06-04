@@ -6,7 +6,9 @@
 #include <QMouseEvent>
 #include"towerposition.h"
 #include"tower.h"
+#include"enemy.h"
 #include<QPoint>
+#include<QTimer>
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -16,6 +18,13 @@ MainWindow::MainWindow(QWidget *parent) :
     initScene();
    // setStyleSheet("border-image:url(:/new/prefix1/背景1.webp);");
    showtowerposition();
+   addWayPoint();
+   the_waves=0;
+   loadWave();
+
+   QTimer *timer=new QTimer(this);
+   connect(timer,SIGNAL(timeout()),this,SLOT(updateMap()));
+   timer->start(30);
 
 }
 void MainWindow::showtowerposition()
@@ -41,6 +50,49 @@ void MainWindow::showtowerposition()
     }
 }
 
+bool MainWindow::loadWave()
+{
+    if(the_waves>=6)
+        return false;
+    WayPoint *startWayPoint=wp_waypointList.back();
+    int enemyInterval[]={100,500,600,1000,3000,6000};//每波出现六个敌人
+    for(int i=0;i<6;++i)
+    {
+        Enemy *enemy=new Enemy(startWayPoint,this);
+        e_enemylist.push_back(enemy);
+        QTimer::singleShot(enemyInterval[i],enemy,SLOT(doActive()));
+    }
+    return true;
+}
+
+void MainWindow::updateMap()
+{
+    foreach (Enemy *enemy,e_enemylist)
+        enemy->move();
+    update();
+}
+
+void MainWindow::addWayPoint()
+{
+    WayPoint *wayPoint1 = new WayPoint(QPoint(900, 400));
+    wp_waypointList.push_back(wayPoint1);
+    WayPoint *wayPoint2 = new WayPoint(QPoint(900, 280));
+    wp_waypointList.push_back(wayPoint2);
+    wayPoint2->setNext(wayPoint1);
+    WayPoint *wayPoint3 = new WayPoint(QPoint(400, 280));
+    wp_waypointList.push_back(wayPoint3);
+    wayPoint3->setNext(wayPoint2);
+    WayPoint *wayPoint4 = new WayPoint(QPoint(400,400));
+    wp_waypointList.push_back(wayPoint4);
+    wayPoint4->setNext(wayPoint3);
+    WayPoint *wayPoint5 = new WayPoint(QPoint(140,400));
+    wp_waypointList.push_back(wayPoint5);
+    wayPoint5->setNext(wayPoint4);
+    WayPoint *wayPoint6 = new WayPoint(QPoint(140,10));
+    wp_waypointList.push_back(wayPoint6);
+    wayPoint6->setNext(wayPoint5);
+
+}  //把测试出来的一系列位点放入QList中
 
 
 void MainWindow::mousePressEvent(QMouseEvent *event)
@@ -72,10 +124,12 @@ void MainWindow::paintEvent(QPaintEvent *)
     foreach(Tower* temp,t_towersList)
         temp->draw(&painter);
 
-
+    foreach(WayPoint* wp,wp_waypointList )
+        wp->draw(&painter);
         // QPoint a(100,100);
    // painter.drawPixmap(a,QPixmap(":/new/prefix1/res/spot2.png"));
-
+   foreach(Enemy *en,e_enemylist)
+       en->draw(&painter);
 }
 
 
@@ -84,6 +138,27 @@ bool MainWindow::canBuyTower()
 {
     return true;
 }
+
+void MainWindow::causeHpLose(int damage)
+{
+
+}
+
+void MainWindow::removeEnemy(Enemy *enemy)
+{
+    e_enemylist.removeOne(enemy);
+    delete enemy;
+    if(e_enemylist.empty())
+    {
+        ++the_waves;
+        if(!loadWave())
+        {
+
+        }
+    }
+
+}
+
 
 
 

@@ -7,10 +7,12 @@
 #include"towerposition.h"
 #include"tower.h"
 #include<QMouseEvent>
+#include"waypoint.h"
+#include"enemy.h"
 namespace Ui {
 class MainWindow;
 }
-
+class Enemy;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -23,12 +25,21 @@ public:
     void paintEvent(QPaintEvent *);
     void mousePressEvent(QMouseEvent *event);//用于鼠标点击——>建塔
     bool canBuyTower();
+    void causeHpLose(int damage=1);
+    void removeEnemy(Enemy *enemy);
 private:
     Ui::MainWindow *ui;
     QList<TowerPosition>list;//塔座的list
     QList<Tower*> t_towersList;//塔的list
+    QList<WayPoint *>wp_waypointList; //位点的list
+    QList<Enemy *>e_enemylist;
+    void addWayPoint();
     void showtowerposition();
+    bool loadWave();
     int len;   //有多少个塔
+    int the_waves;
+public slots:
+    void updateMap();
 };
 
 #endif // MAINWINDOW_H

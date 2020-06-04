@@ -27,13 +27,19 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     tower.cpp \
-    towerposition.cpp
+    towerposition.cpp \
+    waypoint.cpp \
+    enemy.cpp
 
 HEADERS += \
         mainwindow.h \
     config.h \
     tower.h \
-    towerposition.h
+    towerposition.h \
+    waypoint.h \
+    collision.h \
+    enemy.h \
+    enemy.h
 
 FORMS += \
         mainwindow.ui

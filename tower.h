@@ -6,6 +6,7 @@ class Tower
 {
 public:
     Tower(QPoint pos,const QPixmap &sprite= QPixmap(":/new/prefix1/res/塔1.png"));
+
     //void shoot();
     //发射子弹
   //  void setposition(int x,int y);
