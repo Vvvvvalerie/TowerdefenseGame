@@ -9,10 +9,13 @@
 #include<QMouseEvent>
 #include"waypoint.h"
 #include"enemy.h"
+#include"bullet.h"
 namespace Ui {
 class MainWindow;
 }
 class Enemy;
+class Tower;
+class Bullet;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -27,6 +30,9 @@ public:
     bool canBuyTower();
     void causeHpLose(int damage=1);
     void removeEnemy(Enemy *enemy);
+    void removeBullet(Bullet *bullet);
+    void addBullet(Bullet* bullet);
+    QList<Enemy *> enemylist() const;
 private:
     Ui::MainWindow *ui;
     QList<TowerPosition>list;//塔座的list

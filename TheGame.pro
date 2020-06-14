@@ -29,7 +29,8 @@ SOURCES += \
     tower.cpp \
     towerposition.cpp \
     waypoint.cpp \
-    enemy.cpp
+    enemy.cpp \
+    bullet.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -39,7 +40,8 @@ HEADERS += \
     waypoint.h \
     collision.h \
     enemy.h \
-    enemy.h
+    enemy.h \
+    bullet.h
 
 FORMS += \
         mainwindow.ui

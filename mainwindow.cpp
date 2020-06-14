@@ -55,7 +55,7 @@ bool MainWindow::loadWave()
     if(the_waves>=6)
         return false;
     WayPoint *startWayPoint=wp_waypointList.back();
-    int enemyInterval[]={100,500,600,1000,3000,6000};//每波出现六个敌人
+    int enemyInterval[]={100,2000,6000,6000,6000,6000};//每波出现六个敌人
     for(int i=0;i<6;++i)
     {
         Enemy *enemy=new Enemy(startWayPoint,this);
@@ -63,6 +63,16 @@ bool MainWindow::loadWave()
         QTimer::singleShot(enemyInterval[i],enemy,SLOT(doActive()));
     }
     return true;
+}
+
+void MainWindow::addBullet(Bullet *bullet)
+{
+
+}
+
+QList<Enemy *> MainWindow::enemylist() const
+{
+    return e_enemylist;
 }
 
 void MainWindow::updateMap()
@@ -103,7 +113,8 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
     while(it!=list.end()){
         if(it->containPoint(Mousepoint)&&!it->hastower()&&canBuyTower()){
             it->sethasTower();//此处从此设为有塔
-            Tower *temp=new Tower(it->centerPos());
+
+            Tower *temp=new Tower(it->centerPos(),this);
             t_towersList.push_back(temp);//建塔
             update();
             break;//只要在塔座list中找到某一个点符合就好，break
@@ -156,6 +167,11 @@ void MainWindow::removeEnemy(Enemy *enemy)
 
         }
     }
+
+}
+
+void MainWindow::removeBullet(Bullet *bullet)
+{
 
 }
 

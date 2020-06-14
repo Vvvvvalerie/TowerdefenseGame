@@ -5,7 +5,8 @@
 #include<QPoint>
 #include"collision.h"
 #include<QVector2D>
-
+#include<QtMath>
+#include<QMatrix>
 Enemy::Enemy(WayPoint *startPoint, MainWindow *game, const QPixmap &sprite):
     QObject(0),
     e_Hpmax(40),
@@ -29,12 +30,14 @@ void Enemy::draw(QPainter *painter)
     if(!e_active)
         return;
     //画头顶的血条
-    static const int Blood_Bar_Length=20;
+    static const int Blood_Bar_Length=80;
     painter->save();
-    QPoint BloodBar_Pos=e_pos+QPoint(-Blood_Bar_Length/2-5,-5);
-    painter->setPen((Qt::black));
+    QPoint BloodBar_Pos=e_pos+QPoint(-Blood_Bar_Length/2 -5,-e_size.height()/2);
+    painter->setPen((Qt::NoPen));
     painter->setBrush(Qt::red);
     QRect wholeblodRect(BloodBar_Pos,QSize(Blood_Bar_Length,2));
+ //   QRect a(QPoint(20,20),QSize(20,2));
+ //   painter->drawRect(a);
     painter->drawRect(wholeblodRect);//一整个条
     painter->setBrush(Qt::green);  //调整颜色
     QRect bloodbarRect(BloodBar_Pos,QSize((double)e_Hpcurrent/e_Hpmax*Blood_Bar_Length,2));
@@ -44,7 +47,7 @@ void Enemy::draw(QPainter *painter)
     //绘制敌人
     QPoint pianyi(-e_size.width()/2,-e_size.height()/2);//pianyi偏移坐标
     painter->translate(e_pos);  //平移，每次都画在敌人中心坐标的panyi处
-    painter->rotate((e_rotationsprite));
+  //  painter->rotate((e_rotationsprite));//不用rotate比较好看喔
     painter->drawPixmap(pianyi,e_sprite);
     painter->restore();
 
@@ -72,10 +75,40 @@ void Enemy::move()
     //还未接近下一个航点，继续前进
     QPoint targetpoint=e_destinationWayPoint->pos();
     double movementSpeed=e_walkingspeed;   //行进路中可以修改速度？？？？弱AI？？？？？
-    QVector2D normalized(targetpoint-e_pos);  //向量vector
-    normalized.normalized();  //标准化
-    e_pos=e_pos+normalized.toPoint()*movementSpeed;
+    QVector2D normalized(targetpoint - e_pos);
+    normalized.normalize();
+    e_pos = e_pos + normalized.toPoint() * movementSpeed;
     e_rotationsprite = qRadiansToDegrees(qAtan2(normalized.y(), normalized.x())) + 180;//转换方向
+}
+
+void Enemy::getAttacked()
+{
+
+}
+
+void Enemy::gotLostSight()
+{
+
+}
+
+QPoint Enemy::pos()
+{
+    return e_pos;
+}
+
+void Enemy::getDamage(int damage)
+{
+    e_Hpcurrent=e_Hpcurrent-damage;
+
+    if(e_Hpcurrent<=0)
+    {
+        getremoved();
+    }
+}
+
+void Enemy::getremoved()
+{
+
 }
 
 void Enemy::doActive()

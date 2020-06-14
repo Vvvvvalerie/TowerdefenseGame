@@ -7,11 +7,11 @@
         <file>res/怪物.png</file>
         <file>res/怪物1.png</file>
         <file>res/怪物3.png</file>
-        <file>res/怪物4.png</file>
-        <file>res/怪物5.png</file>
         <file>res/spot.png</file>
         <file>res/spot2.png</file>
         <file>res/塔1.png</file>
+        <file>res/保卫萝卜资源-宠物主题03-HD(PetsTheme03-h_爱给网_aigei_com (1).png</file>
+        <file>res/怪物 动.gif</file>
     </qresource>
     <qresource prefix="/new/prefix2"/>
     <qresource prefix="/"/>
