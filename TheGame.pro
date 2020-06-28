@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -30,7 +30,10 @@ SOURCES += \
     towerposition.cpp \
     waypoint.cpp \
     enemy.cpp \
-    bullet.cpp
+    bullet.cpp \
+    audioplayer.cpp \
+    mybutton.cpp \
+    initialwindow.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -41,7 +44,10 @@ HEADERS += \
     collision.h \
     enemy.h \
     enemy.h \
-    bullet.h
+    bullet.h \
+    audioplayer.h \
+    mybutton.h \
+    initialwindow.h
 
 FORMS += \
         mainwindow.ui

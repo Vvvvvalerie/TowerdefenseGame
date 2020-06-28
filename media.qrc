@@ -3,16 +3,39 @@
         <file>be背景2.webp</file>
         <file>背景.jpg</file>
         <file>背景1.webp</file>
-        <file>右上角图标.png</file>
         <file>res/怪物.png</file>
-        <file>res/怪物1.png</file>
         <file>res/怪物3.png</file>
         <file>res/spot.png</file>
         <file>res/spot2.png</file>
-        <file>res/塔1.png</file>
-        <file>res/保卫萝卜资源-宠物主题03-HD(PetsTheme03-h_爱给网_aigei_com (1).png</file>
-        <file>res/怪物 动.gif</file>
+        <file>res/InitialPix.jpg</file>
+        <file>res/startButton.png</file>
+        <file>res/bullet1.png</file>
+        <file>res/enemy1.png</file>
+        <file>res/tower1.Png</file>
+        <file>res/SlowingBullet.png</file>
+        <file>res/SlowingTower.png</file>
+        <file>res/StrongBullet.png</file>
+        <file>res/StrongTower.png</file>
+        <file>res/SlowingBullet_1.png</file>
+        <file>res/Destroy.png</file>
+        <file>res/Destroy1.png</file>
+        <file>res/stopButton.png</file>
+        <file>res/enemy2（active）.gif</file>
+        <file>res/enemy3.png</file>
+        <file>res/comebackBtn.png</file>
+        <file>icon.png</file>
+        <file>res/enemy3 (2).png</file>
+        <file>res/lose！.png</file>
+        <file>res/win！.png</file>
     </qresource>
     <qresource prefix="/new/prefix2"/>
     <qresource prefix="/"/>
+    <qresource prefix="/new/prefix3">
+        <file>res/BGM.mp3</file>
+        <file>res/EnemyDie.mp3</file>
+        <file>res/getTower.mp3</file>
+        <file>res/shootSound.mp3</file>
+        <file>res/EnemyDieAndGetAward.mp3</file>
+        <file>res/LoseLifeSound.mp3</file>
+    </qresource>
 </RCC>

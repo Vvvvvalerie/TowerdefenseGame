@@ -11,12 +11,12 @@ public:
     const QPoint centerPos() const;  //找到一个基座的中心点
     bool containPoint(const QPoint &pos) const;   //鼠标点击的点是否在基座spot上
     void draw(QPainter *painter) const;          //画图
-
+    bool s_hastower;   //是否有塔
 
 
 private:
         QPoint  s_pos;     //安放塔的位置
-        bool s_hastower;   //是否有塔
+
         QPixmap s_sprite;  //塔的图片
         static const QSize s_size;//这是图标的大小 用static const（恒定不变）
 

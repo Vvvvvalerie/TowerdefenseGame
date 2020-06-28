@@ -1,5 +1,6 @@
 #include "enemy.h"
 #include"mainwindow.h"
+#include"audioplayer.h"
 #include<QObject>
 #include<QPainter>
 #include<QPoint>
@@ -7,12 +8,14 @@
 #include<QVector2D>
 #include<QtMath>
 #include<QMatrix>
-Enemy::Enemy(WayPoint *startPoint, MainWindow *game, const QPixmap &sprite):
+Enemy::Enemy(WayPoint *startPoint, MainWindow *game, int level, const QPixmap &sprite):
     QObject(0),
     e_Hpmax(40),
     e_Hpcurrent(40),
-    e_walkingspeed(1.0),
+    e_level(level),
+    e_walkingspeed(2.0),
     e_active(false),
+    e_isSlowed(false),
     e_pos(startPoint->pos()),
     e_sprite(sprite),
     e_destinationWayPoint(startPoint->nextWayPoint()),
@@ -22,9 +25,14 @@ Enemy::Enemy(WayPoint *startPoint, MainWindow *game, const QPixmap &sprite):
 
 
 {
-
+    setLevel(e_level);
 }
-
+Enemy::~Enemy()
+{
+    e_attackedTowerList.clear();
+    e_destinationWayPoint=NULL;
+    e_game=NULL;
+}
 void Enemy::draw(QPainter *painter)
 {
     if(!e_active)
@@ -67,7 +75,7 @@ void Enemy::move()
 
     }
     else{
-        e_game->causeHpLose();// 敌人到达终点，引起减少玩家血量的函数
+        e_game->getHpLose();// 敌人到达终点，引起减少玩家血量的函数
         e_game->removeEnemy(this);// 敌人达到终点，把敌人移走
         return;
     }
@@ -81,14 +89,14 @@ void Enemy::move()
     e_rotationsprite = qRadiansToDegrees(qAtan2(normalized.y(), normalized.x())) + 180;//转换方向
 }
 
-void Enemy::getAttacked()
+void Enemy::getAttacked(Tower *attacker)
 {
-
+ e_attackedTowerList.push_back(attacker);
 }
 
-void Enemy::gotLostSight()
+void Enemy::gotLostSight(Tower *attacker)
 {
-
+    e_attackedTowerList.removeOne(attacker);
 }
 
 QPoint Enemy::pos()
@@ -96,22 +104,112 @@ QPoint Enemy::pos()
     return e_pos;
 }
 
+
+
 void Enemy::getDamage(int damage)
 {
+    // e_game->audioplayer()->playSound(EnemyDestorySound);
+    e_game->audioplayer()->playSound(LaserShootSound);
     e_Hpcurrent=e_Hpcurrent-damage;
 
     if(e_Hpcurrent<=0)
     {
+        e_game->audioplayer()->playSound(EnemyDestorySound);
+        e_game->awardGold(200);// 得到奖励
         getremoved();
     }
 }
 
 void Enemy::getremoved()
 {
+    if(e_attackedTowerList.empty())
+        return;
+    foreach (Tower* attacker,e_attackedTowerList)
+        attacker->targetKilled();//通知每一个正在攻击这个敌人的塔，目标清除
+    e_game->removeEnemy(this);
+}
 
+void Enemy::slowDown()
+{
+    if(!e_isSlowed)
+    {
+        e_walkingspeed=1;
+        e_isSlowed=true;
+    }
+    else return;
+}
+
+void Enemy::setLevel(int level)
+{
+    e_level=level;
+    e_Hpmax=35+5*level; //level=1:HP=40,随level上升血量增加
+    e_Hpcurrent=e_Hpmax;
 }
 
 void Enemy::doActive()
 {
     e_active=true;
+}
+//Enemy2
+
+
+Enemy2::Enemy2(WayPoint *startPoint, MainWindow *game, int level, const QPixmap &sprite):
+    Enemy(startPoint,game,level,sprite)
+
+{
+    m_speedUp=false;
+}
+
+Enemy2::~Enemy2()
+{
+    e_attackedTowerList.clear();
+    e_destinationWayPoint=NULL;
+    e_game=NULL;
+}
+
+
+void Enemy2::getDamage(int damage)
+{
+    Enemy::getDamage(damage);//首先像普通敌人一样正常受伤
+    if(!m_speedUp){  //只能加一次速
+        m_speedUp=true;
+        e_walkingspeed=2+e_walkingspeed; //受伤后加速
+    }
+}
+//EnemyStrong
+/*EnemyStrong::EnemyStrong(WayPoint *startPoint, MainWindow *game, int level, const QPixmap &sprite):
+    Enemy(startPoint,game,level,sprite)
+{
+}
+
+EnemyStrong::~EnemyStrong()
+{
+    e_attackedTowerList.clear();
+    e_destinationWayPoint=NULL;
+    e_game=NULL;
+}
+
+void EnemyStrong::SpecialgetDamage(int damage)
+{
+    Enemy::getDamage(damage/2);
+}*/
+Enemy3::Enemy3(WayPoint *startPoint, MainWindow *game, int level, const QPixmap &sprite):
+    Enemy(startPoint,game,level,sprite)
+
+{
+   // m_speedUp=false;
+}
+
+Enemy3::~Enemy3()
+{
+    e_attackedTowerList.clear();
+    e_destinationWayPoint=NULL;
+    e_game=NULL;
+}
+
+
+void Enemy3::getDamage(int damage)
+{
+    Enemy::getDamage(damage/2);//首先像普通敌人一样正常受伤
+
 }
